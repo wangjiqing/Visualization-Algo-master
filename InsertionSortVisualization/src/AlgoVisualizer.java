@@ -8,16 +8,20 @@ public class AlgoVisualizer {
     private InsertionSortData data;        // 数据
     private AlgoFrame frame;    // 视图
 
-    public AlgoVisualizer(int sceneWidth, int sceneHeight, int N){
+    public AlgoVisualizer(int sceneWidth, int sceneHeight, int N, InsertionSortData.Type dateType){
 
         // 初始化数据
-        data = new InsertionSortData(N, sceneHeight);
+        data = new InsertionSortData(N, sceneHeight, dateType);
 
         // 初始化视图
         EventQueue.invokeLater(() -> {
             frame = new AlgoFrame("Welcome", sceneWidth, sceneHeight);
             new Thread(() -> run()).start();
         });
+    }
+
+    public AlgoVisualizer(int sceneWidth, int sceneHeight, int N) {
+        this(sceneWidth, sceneHeight, N, InsertionSortData.Type.Default);
     }
 
     // 动画逻辑（插入排序逻辑）
@@ -52,8 +56,9 @@ public class AlgoVisualizer {
         int sceneWidth = 800;
         int sceneHeight = 800;
         int N = 100;    // 设置100个可排序的元素
-
-        // TODO: 根据需要设置其他参数，初始化visualizer
+        // 构造一个普通的数组进行插入排序 O(n²)
         new AlgoVisualizer(sceneWidth, sceneHeight, N);
+        // 构造一个近乎有序的数组进行插入排序    O(n)
+        new AlgoVisualizer(sceneWidth, sceneHeight, N, InsertionSortData.Type.NearlyOrdered);
     }
 }

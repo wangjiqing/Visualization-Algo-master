@@ -15,3 +15,4 @@ init Algo Visualization Project for Sakura
 | 3.5 使用概率论分析游戏中开宝箱的中奖率 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/WinningPrize) |
 | 第四章 排序算法可视化 | 代码库 |
 | 4.1 选择排序算法可视化 |[代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/SelectionSortVisualization)|
+| 4.2 插入排序算法可视化 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/InsertionSortVisualization) |

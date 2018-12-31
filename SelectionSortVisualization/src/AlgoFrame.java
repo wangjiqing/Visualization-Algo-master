@@ -60,8 +60,20 @@ public class AlgoFrame extends JFrame{
 
             // 具体绘制
             int w = canvasWidth / data.N();
-            AlgoVisHelper.setColor(g2d, AlgoVisHelper.LightBlue);
             for (int i = 0; i < data.N(); i++) {
+                if (i < data.orderedIndex) {    // 当前元素i为有序索引，设置为红色
+                    AlgoVisHelper.setColor(g2d, AlgoVisHelper.Red);
+                } else {    // 当前元素i为非有序索引，设置为灰色
+                    AlgoVisHelper.setColor(g2d, AlgoVisHelper.Grey);
+                }
+
+                if (i == data.currentCompareIndex) {    // 当前元素i为正在比较的索引，设置为浅蓝色
+                    AlgoVisHelper.setColor(g2d, AlgoVisHelper.LightBlue);
+                }
+
+                if (i == data.currentMinIndex) {    // 当前元素i为最小值的索引，设置为深蓝色
+                    AlgoVisHelper.setColor(g2d, AlgoVisHelper.Indigo);
+                }
                 AlgoVisHelper.fillRectangle(g2d, i * w, canvasHeight - data.get(i), w - 1, data.get(i));
             }
         }

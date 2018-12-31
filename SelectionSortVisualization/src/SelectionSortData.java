@@ -1,6 +1,12 @@
 public class SelectionSortData {
 
     private int[] numbers;
+    // [0...orderedIndex)有序索引
+    public int orderedIndex = -1;
+    // 当前找到的最小元素的索引
+    public int currentMinIndex = -1;
+    // 当前正在比较的元素的索引
+    public int currentCompareIndex = -1;
 
     public SelectionSortData(int N, int randomBound) {
         numbers = new int[N];

@@ -118,3 +118,78 @@
     
             new AlgoVisualizer(sceneWidth, sceneHeight, N);
         }
+        
+## 将选择排序可视化生动展示
+
+    为了显示的生动，将已排好序的用红色标注，当前最小值用深蓝色标注，以浅蓝色为动态扫描最小值的情况
+    
+    1. 在数据层中添加如下三个变量
+    
+        // [0...orderedIndex)有序索引
+        public int orderedIndex = -1;
+        // 当前找到的最小元素的索引
+        public int currentMinIndex = -1;
+        // 当前正在比较的元素的索引
+        public int currentCompareIndex = -1;
+    
+    2. AlgoFrame.java具体的绘制时涉及到数据位置变动所带来的颜色改变
+    
+        // 具体绘制
+        int w = canvasWidth / data.N();
+        for (int i = 0; i < data.N(); i++) {
+            if (i < data.orderedIndex) {    // 当前元素i为有序索引，设置为红色
+                AlgoVisHelper.setColor(g2d, AlgoVisHelper.Red);
+            } else {    // 当前元素i为非有序索引，设置为灰色
+                AlgoVisHelper.setColor(g2d, AlgoVisHelper.Grey);
+            }
+        
+            if (i == data.currentCompareIndex) {    // 当前元素i为正在比较的索引，设置为浅蓝色
+                AlgoVisHelper.setColor(g2d, AlgoVisHelper.LightBlue);
+            }
+        
+            if (i == data.currentMinIndex) {    // 当前元素i为最小值的索引，设置为深蓝色
+                AlgoVisHelper.setColor(g2d, AlgoVisHelper.Indigo);
+            }
+            AlgoVisHelper.fillRectangle(g2d, i * w, canvasHeight - data.get(i), w - 1, data.get(i));
+        }
+        
+    3. AlgoVisualizer.java中提取动态绘制的方法，动态改动数据的状态值
+    
+        // 提取动态绘制方法，动态改动数据的状态值
+        private void setData(int orderedIndex, int currentCompareIndex, int currentMinIndex) {
+            data.orderedIndex = orderedIndex;
+            data.currentCompareIndex = currentCompareIndex;
+            data.currentMinIndex = currentMinIndex;
+        
+            frame.render(data);
+            AlgoVisHelper.pause(DELAY);
+        }
+        
+    4. AlgoVisualizer.java修改动画逻辑
+    
+        // 动画逻辑（选择排序的逻辑代码）
+        private void run(){
+            // 初始的时候没有元素有序 0，没有比较任何元素 -1，没有找到最小元素 -1
+            setData(0, -1, -1);
+        
+            for (int i = 0; i < data.N(); i++) {
+                // 寻找[i, n)区间里的最小值的索引
+                int minIndex = i;
+                // 有序元素为i, 没有当前比较的索引，找到了最小的元素minIndex
+                setData(i, -1, minIndex);
+                for (int j = i + 1; j < data.N(); j++) {
+                    // 有序元素为i,当前比较元素j,最小元素为minIndex
+                    setData(i, j, minIndex);    //
+                    if (data.get(j) < data.get(minIndex)) {
+                        minIndex = j;
+                        // 有序元素为i,当前比较元素j,最小元素为minIndex
+                        setData(i, j, minIndex);    //
+                    }
+                }
+                data.swap(i, minIndex);
+                // 有序元素为i + 1,没有当前比较元素,没有最小元素
+                setData(i + 1, -1, -1); //
+            }
+            // 全部比较完成，没有比较任何元素 -1，没有找到最小元素 -1
+            setData(data.N(), -1, -1);
+        }

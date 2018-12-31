@@ -1,10 +1,8 @@
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.MouseAdapter;
 
 public class AlgoVisualizer {
 
-    private static int DELAY = 10;
+    private static int DELAY = 40;
     private AlgoFrame frame;    // 视图
     private SelectionSortData data;
 
@@ -17,39 +15,46 @@ public class AlgoVisualizer {
         // 初始化视图
         EventQueue.invokeLater(() -> {
             frame = new AlgoFrame("Selection Sort Visualization", sceneWidth, sceneHeight);
-            // TODO: 根据情况决定是否加入键盘鼠标事件监听器
-            frame.addKeyListener(new AlgoKeyListener());
-            frame.addMouseListener(new AlgoMouseListener());
             new Thread(() -> run()).start();
         });
     }
 
     // 动画逻辑（选择排序的逻辑代码）
     private void run(){
-        frame.render(data);
-        AlgoVisHelper.pause(DELAY);
+        // 初始的时候没有元素有序 0，没有比较任何元素 -1，没有找到最小元素 -1
+        setData(0, -1, -1);
 
         for (int i = 0; i < data.N(); i++) {
             // 寻找[i, n)区间里的最小值的索引
             int minIndex = i;
+            // 有序元素为i, 没有当前比较的索引，找到了最小的元素minIndex
+            setData(i, -1, minIndex);
             for (int j = i + 1; j < data.N(); j++) {
+                // 有序元素为i,当前比较元素j,最小元素为minIndex
+                setData(i, j, minIndex);    //
                 if (data.get(j) < data.get(minIndex)) {
                     minIndex = j;
+                    // 有序元素为i,当前比较元素j,最小元素为minIndex
+                    setData(i, j, minIndex);    //
                 }
             }
             data.swap(i, minIndex);
-
-            frame.render(data);
-            AlgoVisHelper.pause(DELAY);
+            // 有序元素为i + 1,没有当前比较元素,没有最小元素
+            setData(i + 1, -1, -1); //
         }
+        // 全部比较完成，没有比较任何元素 -1，没有找到最小元素 -1
+        setData(data.N(), -1, -1);
+    }
+
+    // 提取动态绘制方法，动态改动数据的状态值
+    private void setData(int orderedIndex, int currentCompareIndex, int currentMinIndex) {
+        data.orderedIndex = orderedIndex;
+        data.currentCompareIndex = currentCompareIndex;
+        data.currentMinIndex = currentMinIndex;
 
         frame.render(data);
         AlgoVisHelper.pause(DELAY);
     }
-
-    // TODO: 根据情况决定是否实现键盘鼠标等交互事件监听器类
-    private class AlgoKeyListener extends KeyAdapter{ }
-    private class AlgoMouseListener extends MouseAdapter{ }
 
     public static void main(String[] args) {
 

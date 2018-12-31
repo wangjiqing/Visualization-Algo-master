@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.LinkedList;
 
 public class AlgoFrame extends JFrame{
 
@@ -32,11 +31,9 @@ public class AlgoFrame extends JFrame{
     public int getCanvasHeight(){return canvasHeight;}
 
 
-    private Circle circle;
-    private LinkedList<Point> points;
-    public void render(Circle circle, LinkedList<Point> points){
-        this.circle = circle;
-        this.points = points;
+    private MonteCarloPiData data;
+    public void render(MonteCarloPiData data){
+        this.data = data;
         repaint();
     }
 
@@ -61,12 +58,13 @@ public class AlgoFrame extends JFrame{
             g2d.addRenderingHints(hints);
 
             // 具体绘制
+            Circle circle = data.getCircle();
             AlgoVisHelper.setStrokeWidth(g2d, 3);
             AlgoVisHelper.setColor(g2d, AlgoVisHelper.Blue);
             AlgoVisHelper.strokeCircle(g2d, circle.getX(), circle.getY(), circle.getR());
 
-            for (int i = 0; i < points.size(); i++) {
-                Point p = points.get(i);
+            for (int i = 0; i < data.getPointsNumber(); i++) {
+                Point p = data.getPoint(i);
                 if (circle.contain(p)) {    // 点的坐标在圆上，设置为红色
                     AlgoVisHelper.setColor(g2d, AlgoVisHelper.Red);
                 } else {    // 点的坐标不再圆上，设置为绿色

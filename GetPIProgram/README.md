@@ -45,13 +45,61 @@
             }
         }
     
+    2. 新建MonteCarloPiData.java，封装数据计算及方法
+    
+        // 数据计算
+        public class MonteCarloPiData {
+            private Circle circle;
+            private LinkedList<Point> points;
+            private int insideCircle = 0;
+        
+            public MonteCarloPiData(Circle circle) {
+                this.circle = circle;
+                points = new LinkedList<>();
+            }
+        
+            public Circle getCircle() {
+                return circle;
+            }
+        
+            // 获取列表中的某个元素
+            public Point getPoint(int i) {
+                if (i < 0 || i >= points.size()) {
+                    throw new IllegalArgumentException("out of bound in getPoint!");
+                }
+                return points.get(i);
+            }
+        
+            // 获取所有点的数量（估算正方形的面积）
+            public int getPointsNumber() {
+                return points.size();
+            }
+        
+            // 添加一个点
+            public void addPoint(Point p) {
+                points.add(p);
+                if (circle.contain(p)) {
+                    insideCircle++;
+                }
+            }
+        
+            // 估算Π的值
+            public double estimatePi() {
+                if (points.size() == 0) {
+                    return 0.0d;
+                }
+                int circleArea = insideCircle;
+                int squareArea = points.size();
+                return (double) circleArea * 4 / squareArea;
+            }
+        }
+    
     2. AlgoVisualizer类
     
         public class AlgoVisualizer {
         
             private static int DELAY = 40;
-            private Circle circle;  // 实例化一个圆
-            private LinkedList<Point> points;   // 实例化点的集合
+            private MonteCarloPiData data;
             private AlgoFrame frame;    // 视图
             private int N;  // 打点的总数
         
@@ -62,8 +110,8 @@
                 }
         
                 // 初始化数据
-                circle = new Circle(sceneWidth / 2, sceneHeight / 2, sceneWidth / 2);
-                points = new LinkedList<>();
+                Circle circle = new Circle(sceneWidth / 2, sceneHeight / 2, sceneWidth / 2);
+                data = new MonteCarloPiData(circle);
                 this.N = N;
         
                 // 初始化视图
@@ -76,36 +124,30 @@
             // 动画逻辑
             private void run(){
                 for (int i = 0; i < N; i++) {
-                    frame.render(circle, points);
-                    AlgoVisHelper.pause(DELAY);
-        
+                    if (i % 100 == 0) {     // 一次打100个点
+                        frame.render(data);
+                        AlgoVisHelper.pause(DELAY);
+                        System.out.println(data.estimatePi());
+                    }
+            
                     int x = (int) (Math.random() * frame.getCanvasWidth());
                     int y = (int) (Math.random() * frame.getCanvasHeight());
-        
-                    Point p = new Point(x, y);
-                    points.add(p);
+            
+                    data.addPoint(new Point(x, y));
                 }
-            }
-        
-            public static void main(String[] args) {
-        
-                int sceneWidth = 800;
-                int sceneHeight = 800;
-                int N = 10000;
-        
-                new AlgoVisualizer(sceneWidth, sceneHeight, N);
             }
         }
         
     3. AlgoFrame中具体的绘制方法
     
         // 具体绘制
+        Circle circle = data.getCircle();
         AlgoVisHelper.setStrokeWidth(g2d, 3);
         AlgoVisHelper.setColor(g2d, AlgoVisHelper.Blue);
         AlgoVisHelper.strokeCircle(g2d, circle.getX(), circle.getY(), circle.getR());
         
-        for (int i = 0; i < points.size(); i++) {
-            Point p = points.get(i);
+        for (int i = 0; i < data.getPointsNumber(); i++) {
+            Point p = data.getPoint(i);
             if (circle.contain(p)) {    // 点的坐标在圆上，设置为红色
                 AlgoVisHelper.setColor(g2d, AlgoVisHelper.Red);
             } else {    // 点的坐标不再圆上，设置为绿色

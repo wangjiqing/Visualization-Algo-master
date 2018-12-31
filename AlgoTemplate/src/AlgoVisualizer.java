@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 public class AlgoVisualizer {
 
     // TODO: 创建自己的数据
+    private static int DELAY = 40;
     private Object data;        // 数据
     private AlgoFrame frame;    // 视图
 
@@ -19,9 +20,7 @@ public class AlgoVisualizer {
             // TODO: 根据情况决定是否加入键盘鼠标事件监听器
             frame.addKeyListener(new AlgoKeyListener());
             frame.addMouseListener(new AlgoMouseListener());
-            new Thread(() -> {
-                run();
-            }).start();
+            new Thread(() -> run()).start();
         });
     }
 

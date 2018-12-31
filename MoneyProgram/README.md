@@ -30,31 +30,41 @@
     4. 动态绘制钱分配的柱状图
     
         // 绘制柱状图
-        AlgoVisHelper.setColor(g2d, AlgoVisHelper.Blue);
         int w = canvasWidth / money.length;
         // 动态绘制柱状图，实现每次动态分钱的操作
         for (int i = 0; i < money.length; i++) {
-            AlgoVisHelper.fillRectangle(g2d, i*w + 1,
-                    canvasHeight - money[i], w - 1, money[i]);
+            if (money[i] > 0) {
+                AlgoVisHelper.setColor(g2d, AlgoVisHelper.Blue);
+                AlgoVisHelper.fillRectangle(g2d, i*w + 1,
+                        canvasHeight / 2 - money[i], w - 1, money[i]);
+            } else if (money[i] < 0) {
+                AlgoVisHelper.setColor(g2d, AlgoVisHelper.Red);
+                AlgoVisHelper.fillRectangle(g2d, i*w + 1,
+                        canvasHeight / 2, w - 1, -money[i]);
+            }
         }
         
     5. 在AlgoVisualizer类中实现动画逻辑，每次随机一个人给另外一个人1块钱
     
         // 动画逻辑
-        private void run(){
-            while (true) {
-                frame.render(money);    // 创建
-                AlgoVisHelper.pause(DELAY); // 停留事件
-                // 随机分配，将index为i的钱分给index为j的人
-                for (int i = 0; i < money.length; i++) {
-                    if (money[i] > 0) {
-                        int j = (int) (Math.random() * money.length);
-                        money[i] -= 1;
-                        money[j] += 1;
+            private void run(){
+                while (true) {
+                    Arrays.sort(money);
+                    frame.render(money);    // 创建
+                    AlgoVisHelper.pause(DELAY); // 停留事件
+        
+                    for (int k = 0; k < 50; k++) {
+                        // 随机分配，将index为i的钱分给index为j的人
+                        for (int i = 0; i < money.length; i++) {
+        //                    if (money[i] > 0) {
+                                int j = (int) (Math.random() * money.length);
+                                money[i] -= 1;
+                                money[j] += 1;
+        //                    }
+                        }
                     }
                 }
             }
-        }
         
     6. 调整画布大小/名字/画面绘制时间间隔
     

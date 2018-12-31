@@ -59,12 +59,18 @@ public class AlgoFrame extends JFrame{
             g2d.addRenderingHints(hints);
 
             // 绘制柱状图
-            AlgoVisHelper.setColor(g2d, AlgoVisHelper.Blue);
             int w = canvasWidth / money.length;
             // 动态绘制柱状图，实现每次动态分钱的操作
             for (int i = 0; i < money.length; i++) {
-                AlgoVisHelper.fillRectangle(g2d, i*w + 1,
-                        canvasHeight - money[i], w - 1, money[i]);
+                if (money[i] > 0) {
+                    AlgoVisHelper.setColor(g2d, AlgoVisHelper.Blue);
+                    AlgoVisHelper.fillRectangle(g2d, i*w + 1,
+                            canvasHeight / 2 - money[i], w - 1, money[i]);
+                } else if (money[i] < 0) {
+                    AlgoVisHelper.setColor(g2d, AlgoVisHelper.Red);
+                    AlgoVisHelper.fillRectangle(g2d, i*w + 1,
+                            canvasHeight / 2, w - 1, -money[i]);
+                }
             }
         }
 

@@ -1,10 +1,11 @@
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
+import java.util.Arrays;
 
 public class AlgoVisualizer {
 
-    private static int DELAY = 1;   // 画面停留事件间隔
+    private static int DELAY = 40;   // 画面停留事件间隔
     private int[] money;        // 构造钱的持有者对象
     private AlgoFrame frame;    // 视图
 
@@ -26,14 +27,18 @@ public class AlgoVisualizer {
     // 动画逻辑
     private void run(){
         while (true) {
+            Arrays.sort(money);
             frame.render(money);    // 创建
             AlgoVisHelper.pause(DELAY); // 停留事件
-            // 随机分配，将index为i的钱分给index为j的人
-            for (int i = 0; i < money.length; i++) {
-                if (money[i] > 0) {
-                    int j = (int) (Math.random() * money.length);
-                    money[i] -= 1;
-                    money[j] += 1;
+
+            for (int k = 0; k < 50; k++) {
+                // 随机分配，将index为i的钱分给index为j的人
+                for (int i = 0; i < money.length; i++) {
+//                    if (money[i] > 0) {
+                        int j = (int) (Math.random() * money.length);
+                        money[i] -= 1;
+                        money[j] += 1;
+//                    }
                 }
             }
         }

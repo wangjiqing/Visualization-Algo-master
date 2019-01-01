@@ -16,3 +16,4 @@ init Algo Visualization Project for Sakura
 | 第四章 排序算法可视化 | 代码库 |
 | 4.1 选择排序算法可视化 |[代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/SelectionSortVisualization)|
 | 4.2 插入排序算法可视化 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/InsertionSortVisualization) |
+| 4.3 归并排序算法及可视化 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/MergeSortVisualization) |

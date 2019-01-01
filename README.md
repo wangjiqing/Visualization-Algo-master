@@ -19,3 +19,4 @@ init Algo Visualization Project for Sakura
 | 4.3 归并排序算法及可视化 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/MergeSortVisualization) |
 | 4.4 快速排序算法可视化 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/QuickSortVisualization) |
 | 4.5 双路快排算法可视化 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/TwoWaysQuickSort) |
+| 4.6 三路快排算法可视化 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/ThreeWaysQuickSort) |

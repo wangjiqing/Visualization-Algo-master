@@ -1,4 +1,12 @@
+import java.util.Arrays;
+
 public class QuickSortData {
+
+    public enum Type {
+        Default,
+        NearlyOrdered,
+        Identical
+    }
 
     private int[] numbers;
     public int l, r;
@@ -6,15 +14,38 @@ public class QuickSortData {
     public int curPivot;
     public int curElement;
 
-    public QuickSortData(int N, int randomBound) {
+    public QuickSortData(int N, int randomBound, Type dataType) {
 
         numbers = new int[N];
         fixedPivots = new boolean[N];
 
+        int lBound = 1;
+        int rBound = randomBound;
+
+        if (dataType == Type.Identical) {
+            int avgNumber = (lBound + rBound) / 2;
+            lBound = avgNumber;
+            rBound = avgNumber;
+        }
+
         for (int i = 0; i < N; i++) {
-            numbers[i] = (int) (Math.random() * randomBound) + 1;
+            numbers[i] = (int) (Math.random() * (rBound - lBound + 1)) + lBound;
             fixedPivots[i] = false;
         }
+
+        if (dataType == Type.NearlyOrdered) {
+            Arrays.sort(numbers);
+            int swapTime = (int) (0.01 * N);
+            for (int i = 0; i < swapTime; i++) {
+                int a = (int) (Math.random() * N);
+                int b = (int) (Math.random() * N);
+                swap(a, b);
+            }
+        }
+    }
+
+    public QuickSortData(int N, int randomBound) {
+        this(N, randomBound, Type.Default);
     }
 
     public int N() {

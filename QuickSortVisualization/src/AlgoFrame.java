@@ -71,7 +71,7 @@ public class AlgoFrame extends JFrame{
                     AlgoVisHelper.setColor(g2d, AlgoVisHelper.Indigo);
                 }
                 if (i == data.curElement) {
-                    AlgoVisHelper.setColor(g2d, AlgoVisHelper.Red);
+                    AlgoVisHelper.setColor(g2d, AlgoVisHelper.LightBlue);
                 }
                 if (data.fixedPivots[i]) {
                     AlgoVisHelper.setColor(g2d, AlgoVisHelper.Red);

@@ -4,22 +4,25 @@ import java.awt.event.MouseAdapter;
 
 public class AlgoVisualizer {
 
-    // TODO: 创建自己的数据
     private static int DELAY = 40;
 
     private QuickSortData data;        // 数据
     private AlgoFrame frame;    // 视图
 
-    public AlgoVisualizer(int sceneWidth, int sceneHeight, int N){
+    public AlgoVisualizer(int sceneWidth, int sceneHeight, int N, QuickSortData.Type dataType) {
 
         // 初始化数据
-        data = new QuickSortData(N, sceneHeight);
+        data = new QuickSortData(N, sceneHeight, dataType);
 
         // 初始化视图
         EventQueue.invokeLater(() -> {
             frame = new AlgoFrame("Welcome", sceneWidth, sceneHeight);
             new Thread(() -> run()).start();
         });
+    }
+
+    public AlgoVisualizer(int sceneWidth, int sceneHeight, int N) {
+        this(sceneWidth, sceneHeight, N, QuickSortData.Type.Default);
     }
 
     // 动画逻辑
@@ -51,6 +54,11 @@ public class AlgoVisualizer {
     }
 
     private int partition(int l, int r) {
+        // 解决近乎有序时算法退化为O(n²)的问题i
+        int p = (int) (Math.random() * (r - l + 1)) + l;
+        setData(l, r, -1, p, -1);
+        data.swap(l, p);
+
         int v = data.get(l);
         setData(l, r, -1, l, -1);
 
@@ -88,6 +96,11 @@ public class AlgoVisualizer {
         int sceneHeight = 800;
         int N = 100;
 
+        // 完全随机数据排序
         new AlgoVisualizer(sceneWidth, sceneHeight, N);
+        // 近乎有序数据排序
+        new AlgoVisualizer(sceneWidth, sceneHeight, N, QuickSortData.Type.NearlyOrdered);
+        // 完全相等数据排序（非常不建议用此方法排序）
+        new AlgoVisualizer(sceneWidth, sceneHeight, N, QuickSortData.Type.Identical);
     }
 }

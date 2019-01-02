@@ -2,6 +2,8 @@
 init Algo Visualization Project for Sakura
 # 项目描述
 针对慕课网上的《深度实战玩转算法》课程总结的代码描述，课程详情可参见：https://coding.imooc.com/class/138.html
+# 运行环境
+项目基于jdk1.8开发
 # 包含内容
 | 第二章 GUI编程入门 | 代码库 | 
 | :--- | :---: | 

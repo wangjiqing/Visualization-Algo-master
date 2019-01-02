@@ -22,3 +22,5 @@ init Algo Visualization Project for Sakura
 | 4.4 快速排序算法可视化 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/QuickSortVisualization) |
 | 4.5 双路快排算法可视化 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/TwoWaysQuickSort) |
 | 4.6 三路快排算法可视化 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/ThreeWaysQuickSort) |
+| 第五章 走迷宫 | 代码库 |
+| 5.1 使用深度优先遍历尝试解迷宫 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/MazeSolver) |

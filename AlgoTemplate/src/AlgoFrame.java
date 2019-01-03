@@ -28,8 +28,13 @@ public class AlgoFrame extends JFrame{
         this(title, 1024, 768);
     }
 
-    public int getCanvasWidth(){return canvasWidth;}
-    public int getCanvasHeight(){return canvasHeight;}
+    public int getCanvasWidth() {
+        return canvasWidth;
+    }
+
+    public int getCanvasHeight() {
+        return canvasHeight;
+    }
 
     // TODO: 设置自己的数据
     private Object data;

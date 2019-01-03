@@ -16,6 +16,7 @@ public class MazeData {
     private int exitX, exitY;   // 出口坐标
     public boolean[][] visited; // 标识是否被访问过的点
     public boolean[][] path;    // 某个点是否时已经寻找到的路径
+    public boolean[][] result;  // 最终路径
 
     public MazeData(String fileName) {
         if (fileName == null) {
@@ -37,6 +38,7 @@ public class MazeData {
             maze = new char[N][M];
             visited = new boolean[N][M];
             path = new boolean[N][M];
+            result = new boolean[N][M];
             // 读取后续的N行
             for (int i = 0; i < N; i++) {
                 String line = scanner.nextLine();
@@ -50,6 +52,7 @@ public class MazeData {
                     maze[i][j] = line.charAt(j);
                     visited[i][j] = false;
                     path[i][j] = false;
+                    result[i][j] = false;
                 }
             }
         } catch (Exception ex) {

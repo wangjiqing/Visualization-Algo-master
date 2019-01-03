@@ -76,6 +76,11 @@ public class AlgoFrame extends JFrame{
                         AlgoVisHelper.setColor(g2d, AlgoVisHelper.Yellow);
                     }
 
+                    // 最终渲染迷宫的路径为红色
+                    if (data.result[i][j]) {
+                        AlgoVisHelper.setColor(g2d, AlgoVisHelper.Red);
+                    }
+
                     AlgoVisHelper.fillRectangle(g2d, j * w, i * h, w, h);
                 }
             }

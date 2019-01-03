@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.Stack;
 
 public class AlgoVisualizer {
 
@@ -29,10 +30,13 @@ public class AlgoVisualizer {
     private void run(){
         setData(-1, -1, false);
 
-        // 入口开始求解迷宫
-        if (!go(data.getEntranceX(), data.getEntranceY())) {
-            System.out.println("The maze has NO solution");
-        }
+        // （使用递归方法）入口开始求解迷宫
+//        if (!go(data.getEntranceX(), data.getEntranceY())) {
+//            System.out.println("The maze has NO solution");
+//        }
+
+        // 非递归实现迷宫求解
+        go(data);
 
         setData(-1, -1, false);
     }
@@ -45,7 +49,53 @@ public class AlgoVisualizer {
         AlgoVisHelper.pause(DELAY);
     }
 
-    // 入口开始求解迷宫，求解成功返回true,否则返回false
+    // 非递归实现迷宫求解，引入栈数据结构
+    private void go(MazeData data) {
+        Stack<Position> stack = new Stack<>();
+        Position entrance = new Position(data.getEntranceX(), data.getEntranceY());
+        stack.push(entrance);
+        data.visited[entrance.getX()][entrance.getY()] = true;
+
+        boolean isSolved = false;
+        while (!stack.isEmpty()) {
+            Position curPos = stack.pop();
+            setData(curPos.getX(), curPos.getY(), true);
+
+            if (curPos.getX() == data.getExitX() && curPos.getY() == data.getExitY()) {
+                isSolved = true;
+                // 回头标记迷宫路径
+                findPath(curPos);
+                break;
+            }
+
+            for (int i = 0; i < 4; i++) {
+                int newX = curPos.getX() + d[i][0];
+                int newY = curPos.getY() + d[i][1];
+
+                if (data.inArea(newX, newY)
+                        && data.getMaze(newX, newY) == MazeData.ROAD
+                        && !data.visited[newX][newY]) {
+                    stack.push(new Position(newX, newY, curPos));
+                    data.visited[newX][newY] = true;
+                }
+            }
+        }
+
+        if (!isSolved) {
+            System.out.println("The maze has no Sulution!");
+        }
+    }
+
+    // 回溯路径
+    private void findPath(Position des) {
+        Position cur = des;
+        while (cur != null) {
+            data.result[cur.getX()][cur.getY()] = true;
+            cur = cur.getPrev();
+        }
+    }
+
+    // （递归算法）入口开始求解迷宫，求解成功返回true,否则返回false
     private boolean go(int x, int y) {
         if (!data.inArea(x, y)) {
             throw new IllegalArgumentException("x, y are out of bound!");

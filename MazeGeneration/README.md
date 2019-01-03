@@ -102,7 +102,7 @@
    
    ![5-1-result](resources/5-1-result.png)
 
-## 二、通过广度优先遍历生成一个迷宫（非随机）
+## 二、通过广度优先遍历生成一个迷宫（递归非随机）
 
    1. 继续做动画渲染操作，使用递归完成深度优先遍历，打通墙的连接，形成一个迷宫
    
@@ -144,6 +144,64 @@
    
    2. 最终形成的结果如下
    
-   ![5-2-result](resources/5-2-result.png)     
+   ![5-2-result](resources/5-2-result.png)   
+   
+## 三、通过广度优先遍历生成一个迷宫（非递归非随机）  
 
+   1. 继续做动画渲染操作，使用非递归完成深度优先遍历，打通墙的连接，形成一个迷宫
+   
+        private void go() {
+            Stack<Position> stack = new Stack<>();
+            Position first = new Position(data.getEntranceX(), data.getEntranceY() + 1);
+            stack.push(first);
+            data.visited[first.getX()][first.getY()] = true;
     
+            while (!stack.isEmpty()) {
+                Position curPos = stack.pop();
+    
+                for (int i = 0; i < 4; i++) {
+                    int newX = curPos.getX() + d[i][0] * 2;
+                    int newY = curPos.getY() + d[i][1] * 2;
+    
+                    if (data.inArea(newX, newY) && !data.visited[newX][newY]) {
+                        stack.push(new Position(newX, newY));
+                        data.visited[newX][newY] = true;
+                        setData(curPos.getX() + d[i][0], curPos.getY() + d[i][1]);
+                    }
+                }
+            }
+        }
+
+   2. 最终实现结果如下
+   
+   ![5-3-result](resources/5-3-result.png)
+   
+## 广度优先遍历生成一个迷宫
+
+   1. 使用队列来实现广度优先遍历
+   
+        private void go1() {
+            LinkedList<Position> queue = new LinkedList<>();
+            Position first = new Position(data.getEntranceX(), data.getEntranceY() + 1);
+            queue.addLast(first);
+            data.visited[first.getX()][first.getY()] = true;
+    
+            while (queue.size() != 0) {
+                Position curPos = queue.removeFirst();
+    
+                for (int i = 0; i < 4; i++) {
+                    int newX = curPos.getX() + d[i][0] * 2;
+                    int newY = curPos.getY() + d[i][1] * 2;
+    
+                    if (data.inArea(newX, newY) && !data.visited[newX][newY]) {
+                        queue.addLast(new Position(newX, newY));
+                        data.visited[newX][newY] = true;
+                        setData(curPos.getX() + d[i][0], curPos.getY() + d[i][1]);
+                    }
+                }
+            }
+        }
+        
+   2. 最终实现结果如下
+   
+   ![5-4-result](resources/5-4-result.png)

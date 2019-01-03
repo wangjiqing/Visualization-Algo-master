@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
+import java.util.LinkedList;
+import java.util.Stack;
 
 public class AlgoVisualizer {
 
@@ -29,8 +31,14 @@ public class AlgoVisualizer {
     private void run() {
         setData(-1, -1);
 
-        // 初始点
-        go(data.getEntranceX(), data.getEntranceY() + 1);
+        // 递归调用(深度优先遍历)
+//        go(data.getEntranceX(), data.getEntranceY() + 1);
+
+        // 非递归调用(深度优先遍历)
+//        go();
+
+        // 广度优先遍历
+        go1();
 
         setData(-1, -1);
     }
@@ -43,6 +51,7 @@ public class AlgoVisualizer {
         AlgoVisHelper.pause(DELAY);
     }
 
+    // 递归绘制
     private void go(int x, int y) {
         if (!data.inArea(x, y)) {
             throw new IllegalArgumentException("x, y are out of bound!");
@@ -55,6 +64,52 @@ public class AlgoVisualizer {
             if (data.inArea(newX, newY) && !data.visited[newX][newY]) {
                 setData(x + d[i][0], y + d[i][1]);
                 go(newX, newY);
+            }
+        }
+    }
+
+    // 非递归绘制
+    private void go() {
+        Stack<Position> stack = new Stack<>();
+        Position first = new Position(data.getEntranceX(), data.getEntranceY() + 1);
+        stack.push(first);
+        data.visited[first.getX()][first.getY()] = true;
+
+        while (!stack.isEmpty()) {
+            Position curPos = stack.pop();
+
+            for (int i = 0; i < 4; i++) {
+                int newX = curPos.getX() + d[i][0] * 2;
+                int newY = curPos.getY() + d[i][1] * 2;
+
+                if (data.inArea(newX, newY) && !data.visited[newX][newY]) {
+                    stack.push(new Position(newX, newY));
+                    data.visited[newX][newY] = true;
+                    setData(curPos.getX() + d[i][0], curPos.getY() + d[i][1]);
+                }
+            }
+        }
+    }
+
+    // 广度优先遍历
+    private void go1() {
+        LinkedList<Position> queue = new LinkedList<>();
+        Position first = new Position(data.getEntranceX(), data.getEntranceY() + 1);
+        queue.addLast(first);
+        data.visited[first.getX()][first.getY()] = true;
+
+        while (queue.size() != 0) {
+            Position curPos = queue.removeFirst();
+
+            for (int i = 0; i < 4; i++) {
+                int newX = curPos.getX() + d[i][0] * 2;
+                int newY = curPos.getY() + d[i][1] * 2;
+
+                if (data.inArea(newX, newY) && !data.visited[newX][newY]) {
+                    queue.addLast(new Position(newX, newY));
+                    data.visited[newX][newY] = true;
+                    setData(curPos.getX() + d[i][0], curPos.getY() + d[i][1]);
+                }
             }
         }
     }

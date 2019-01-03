@@ -1,4 +1,7 @@
 import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 public class AlgoVisualizer {
@@ -36,7 +39,10 @@ public class AlgoVisualizer {
 //        }
 
         // 非递归实现迷宫求解
-        go(data);
+//        go(data);
+
+        // 广度优先遍历实现迷宫求解
+        go1(data);
 
         setData(-1, -1, false);
     }
@@ -76,6 +82,43 @@ public class AlgoVisualizer {
                         && data.getMaze(newX, newY) == MazeData.ROAD
                         && !data.visited[newX][newY]) {
                     stack.push(new Position(newX, newY, curPos));
+                    data.visited[newX][newY] = true;
+                }
+            }
+        }
+
+        if (!isSolved) {
+            System.out.println("The maze has no Sulution!");
+        }
+    }
+
+    // 广度优先遍历求解迷宫
+    private void go1(MazeData data) {
+        LinkedList<Position> queue = new LinkedList<>();
+        Position entrance = new Position(data.getEntranceX(), data.getEntranceY());
+        queue.addLast(entrance);
+        data.visited[entrance.getX()][entrance.getY()] = true;
+
+        boolean isSolved = false;
+        while (queue.size() != 0) {
+            Position curPos = queue.pop();
+            setData(curPos.getX(), curPos.getY(), true);
+
+            if (curPos.getX() == data.getExitX() && curPos.getY() == data.getExitY()) {
+                isSolved = true;
+                // 回头标记迷宫路径
+                findPath(curPos);
+                break;
+            }
+
+            for (int i = 0; i < 4; i++) {
+                int newX = curPos.getX() + d[i][0];
+                int newY = curPos.getY() + d[i][1];
+
+                if (data.inArea(newX, newY)
+                        && data.getMaze(newX, newY) == MazeData.ROAD
+                        && !data.visited[newX][newY]) {
+                    queue.addLast(new Position(newX, newY, curPos));
                     data.visited[newX][newY] = true;
                 }
             }

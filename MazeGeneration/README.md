@@ -205,3 +205,57 @@
    2. 最终实现结果如下
    
    ![5-4-result](resources/5-4-result.png)
+   
+## 使用随机队列生成随机迷宫
+
+   1. 底层数据结构：数组
+   2. 入队：把元素放入数组
+   3. 出队：从数组中随机选择一个元素
+   4. 不需要维护数据中间的联系性，也就是这么操作，随机选择元素出队，选择随机的元素和数组末端的元素交换位置，然后出队
+   5. 构建一个随机删除一个随机元素的队列，详情见代码： RandomQueue.java
+   6. 使用随机队列生成一个随机迷宫
+   
+            // 使用随机队列遍历
+            private void go2() {
+                RandomQueue<Position> queue = new RandomQueue<>();
+                Position first = new Position(data.getEntranceX(), data.getEntranceY() + 1);
+                queue.add(first);
+                data.visited[first.getX()][first.getY()] = true;
+        
+                while (queue.size() != 0) {
+                    Position curPos = queue.remove();
+        
+                    for (int i = 0; i < 4; i++) {
+                        int newX = curPos.getX() + d[i][0] * 2;
+                        int newY = curPos.getY() + d[i][1] * 2;
+        
+                        if (data.inArea(newX, newY) && !data.visited[newX][newY]) {
+                            queue.add(new Position(newX, newY));
+                            data.visited[newX][newY] = true;
+                            setData(curPos.getX() + d[i][0], curPos.getY() + d[i][1]);
+                        }
+                    }
+                }
+            }
+   
+   ![5-5-result](resources/5-5-result.png)
+   
+## 优化我们的代码，隐藏生成方式
+
+   我们将还没有生成的地方用黑色掩盖，随着迷宫的生成，逐步打开迷宫，直至生成所有的迷宫位置，消除全部黑色的部分
+   
+   ![5-6-result](resources/5-6-result.png)
+   
+## 生成随机性更强的迷宫
+
+   现在的迷宫中有很强的引导性，入口左上，出口右下，路径近似与左上到右下
+   1. 我们使用底层数据结构为链表来实现一个随机队列，用这个随机队列生成随机性更强的迷宫
+   2. 入队：随机入队首或者队尾
+   3. 出队：随机从队首或者队尾挑选元素
+   4. 随机迷宫的生成
+   
+   ![5-7-result](resources/5-7-result.png)
+   
+   6. 添加键盘时间 融合寻找迷宫路径算法
+   
+   ![5-8-result](resources/5-8-result.png)

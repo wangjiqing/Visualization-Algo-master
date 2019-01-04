@@ -61,10 +61,16 @@ public class AlgoFrame extends JFrame{
             int h = canvasHeight / data.N();
             for (int i = 0; i < data.N(); i++) {
                 for (int j = 0; j < data.M(); j++) {
-                    if (data.maze[i][j] == MazeData.WALL) {  // 如果为#，为墙，设置为浅蓝色
+                    if (data.isMist[i][j]) {    // 设置隐藏我们的迷宫模板
+                        AlgoVisHelper.setColor(g2d, AlgoVisHelper.Black);
+                    } else if (data.maze[i][j] == MazeData.WALL) {  // 如果为#，为墙，设置为浅蓝色
                         AlgoVisHelper.setColor(g2d, AlgoVisHelper.LightBlue);
                     } else {    // 空白处设置为白色
                         AlgoVisHelper.setColor(g2d, AlgoVisHelper.White);
+                    }
+
+                    if (data.path[i][j]) {
+                        AlgoVisHelper.setColor(g2d, AlgoVisHelper.Yellow);
                     }
 
                     AlgoVisHelper.fillRectangle(g2d, j * w, i * h, w, h);

@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -23,6 +24,7 @@ public class AlgoVisualizer {
         // 初始化视图
         EventQueue.invokeLater(() -> {
             frame = new AlgoFrame("Random Maze Generation Visualization", sceneWidth, sceneHeight);
+            frame.addKeyListener(new AlgoKeyListener());
             new Thread(() -> run()).start();
         });
     }
@@ -38,7 +40,13 @@ public class AlgoVisualizer {
 //        go();
 
         // 广度优先遍历
-        go1();
+//        go1();
+
+        // 使用随机队列生成随机迷宫
+//        go2();
+
+        // 使用随即队列生成随机性更强的迷宫
+        go3();
 
         setData(-1, -1);
     }
@@ -110,6 +118,112 @@ public class AlgoVisualizer {
                     data.visited[newX][newY] = true;
                     setData(curPos.getX() + d[i][0], curPos.getY() + d[i][1]);
                 }
+            }
+        }
+    }
+
+    // 使用随机队列遍历
+    private void go2() {
+        RandomQueue<Position> queue = new RandomQueue<>();
+        Position first = new Position(data.getEntranceX(), data.getEntranceY() + 1);
+        queue.add(first);
+        data.visited[first.getX()][first.getY()] = true;
+
+        // 打开迷雾
+        data.openMist(first.getX(), first.getY());   // 打开迷雾
+        while (queue.size() != 0) {
+            Position curPos = queue.remove();
+
+            for (int i = 0; i < 4; i++) {
+                int newX = curPos.getX() + d[i][0] * 2;
+                int newY = curPos.getY() + d[i][1] * 2;
+
+                if (data.inArea(newX, newY) && !data.visited[newX][newY]) {
+                    queue.add(new Position(newX, newY));
+                    data.visited[newX][newY] = true;
+                    // 打开迷雾
+                    data.openMist(newX, newY);
+                    setData(curPos.getX() + d[i][0], curPos.getY() + d[i][1]);
+                }
+            }
+        }
+    }
+
+    // 使用随机队列遍历
+    private void go3() {
+        LinkRandomQueue<Position> queue = new LinkRandomQueue<>();
+        Position first = new Position(data.getEntranceX(), data.getEntranceY() + 1);
+        queue.add(first);
+        data.visited[first.getX()][first.getY()] = true;
+
+        // 打开迷雾
+        data.openMist(first.getX(), first.getY());   // 打开迷雾
+        while (queue.size() != 0) {
+            Position curPos = queue.remove();
+
+            for (int i = 0; i < 4; i++) {
+                int newX = curPos.getX() + d[i][0] * 2;
+                int newY = curPos.getY() + d[i][1] * 2;
+
+                if (data.inArea(newX, newY) && !data.visited[newX][newY]) {
+                    queue.add(new Position(newX, newY));
+                    data.visited[newX][newY] = true;
+                    // 打开迷雾
+                    data.openMist(newX, newY);
+                    setData(curPos.getX() + d[i][0], curPos.getY() + d[i][1]);
+                }
+            }
+        }
+    }
+
+    // 非递归实现迷宫求解，引入栈数据结构
+    private boolean goMaze(int x, int y) {
+        if (!data.inArea(x, y)) {
+            throw new IllegalArgumentException("x, y are out of bound");
+        }
+
+        data.visited[x][y] = true;
+        setPathData(x, y, true);
+
+        if (x == data.getExitX() && y == data.getExitY()) {
+            return true;
+        }
+
+        for (int i = 0; i < 4; i++) {
+            int newX = x + d[i][0];
+            int newY = y + d[i][1];
+            if (data.inArea(newX, newY) && data.maze[newX][newY] == MazeData.ROAD && !data.visited[newX][newY]) {
+                if (goMaze(newX, newY)) {
+                    return true;
+                }
+            }
+        }
+
+        // 回溯
+        setPathData(x, y, false);
+        return false;
+    }
+
+    private void setPathData(int x, int y, boolean isPath){
+        if(data.inArea(x, y))
+            data.path[x][y] = isPath;
+
+        frame.render(data);
+        AlgoVisHelper.pause(DELAY);
+    }
+
+    // 键盘事件，走迷宫
+    private class AlgoKeyListener extends KeyAdapter {
+
+        @Override
+        public void keyReleased(KeyEvent event) {
+            if (event.getKeyChar() == ' ') {
+                for (int i = 0; i < data.N(); i++) {
+                    for (int j = 0; j < data.M(); j++) {
+                        data.visited[i][j] = false;
+                    }
+                }
+                new Thread(() -> goMaze(data.getEntranceX(), data.getEntranceY())).start();
             }
         }
     }

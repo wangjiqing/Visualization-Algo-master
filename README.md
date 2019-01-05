@@ -26,3 +26,5 @@ init Algo Visualization Project for Sakura
 | 5.1 使用深度优先遍历尝试解迷宫 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/MazeSolver) |
 | 第六章 迷宫的生成 | 代码库 |
 | 6.1 随机迷宫生成 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/MazeGeneration) |
+| 第七章 扫雷游戏 | [代码库] |
+| 7.1 扫雷游戏代码库 | [代码库](https://github.com/wangjiqing/Visualization-Algo-master/tree/master/MineSweeper) |

@@ -1,6 +1,8 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class AlgoVisualizer {
 
@@ -29,11 +31,23 @@ public class AlgoVisualizer {
     // 动画逻辑
     private void run(){
 
-        setData();
+        setData(false, -1, -1);
 
     }
 
-    private void setData() {
+    private void setData(boolean isLeftClicked, int x, int y) {
+        if (data.inArea(x, y)) {
+            if (isLeftClicked) {
+                if (data.isMine(x, y)) {
+                    // Game Over
+                    data.open[x][y] = true;
+                } else {
+                    data.open(x, y);
+                }
+            } else {
+                data.flags[x][y] = !data.flags[x][y];
+            }
+        }
         frame.render(data);
         AlgoVisHelper.pause(DELAY);
     }
@@ -43,14 +57,34 @@ public class AlgoVisualizer {
 
     }
     private class AlgoMouseListener extends MouseAdapter {
+        @Override
+        public void mouseReleased(MouseEvent event) {
+            event.translatePoint(
+                    -(frame.getBounds().width - frame.getCanvasWidth()),
+                    -(frame.getBounds().height - frame.getCanvasHeight())
+            );
 
+            Point pos = event.getPoint();
+
+            int w = frame.getCanvasWidth() / data.M();
+            int h = frame.getCanvasHeight() / data.N();
+
+            int x = pos.y / h;
+            int y = pos.x / w;
+            // 左键点击
+            if (SwingUtilities.isLeftMouseButton(event)) {
+                setData(true, x, y);
+            } else {    // 左键点击
+                setData(false, x, y);
+            }
+        }
     }
 
     public static void main(String[] args) {
 
         int N = 20;
         int M = 20;
-        int mineNumber = 1;
+        int mineNumber = 50;    // 雷的个数
 
         new AlgoVisualizer(N, M, mineNumber);
     }
